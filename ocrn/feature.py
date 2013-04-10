@@ -1,5 +1,6 @@
 import Image as im
 import numpy as np
+import os
 
 class feature:
 	#Return a 10X10 array from a monochrome BMP Image
@@ -45,3 +46,35 @@ class feature:
 		return vector[0]
 
 
+    @staticmethod
+    def getTrainingCount():
+        """
+        Gets the number of trained images from the imageData file.
+        """
+        wcData = os.popen("wc -l ../data/imagedata").read()
+        # Because wc returns number and filename
+        return wcData.split()[0]
+        
+
+    @staticmethod
+    def generateDataSetFromRoaster(dataTuple):
+        """
+        Takes a tuple of (imageData, asciiVal) and adds all images to
+        ../data/trainingdata/ and then adds a line to imagedata
+        """
+        imageData, asciiVal = dataTuple
+        
+        # For each imageData entry in the imageData list, save as a bmp and
+        # write that path to imageData with `path:asciiVal`
+
+        #This is to not have to do a getTrainingCount call every time.
+        trainCount = getTrainingCount()
+        datafile = open("../data/imagedata", "a")
+
+        for image in imageData:
+            pathname = "../data/trainingdata/" + trainCount + ".bmp"
+            image.save(pathname, "BMP")
+            datafile.write(pathname+":"+asciiVal)
+            trainCount++
+        
+       datafile.close()

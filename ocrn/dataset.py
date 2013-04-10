@@ -28,3 +28,4 @@ class dataset:
 			x = line.split(':')
 			self.addTrainingData(ft.feature.getImageFeatureVector(x[0]),np.array([int(x[1])]))
 		return 1
+
