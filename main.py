@@ -27,6 +27,6 @@ while(True):
 	elif x == "e":
 		e = raw_input("Enter input file\t:\t")
 		x = n.activate(ft.feature.getImageFeatureVector(e))
-		print "\nThere is a high probability that the image is '"+str(unichr(x))+"'\n"
+		print "\nThere is a high probability that the image is '"+str(chr(x))+"'\n"
 	else:
 		print "Invalid option\n"

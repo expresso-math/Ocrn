@@ -27,5 +27,6 @@ class dataset:
 		for line in fileinput.input(['data/inputdata']):
 			x = line.split(':')
 			self.addTrainingData(ft.feature.getImageFeatureVector(x[0]),np.array([int(x[1])]))
+		print "Character value: " + str(x[1]) + "Int val: " + str(int(x[1]))
 		return 1
 
