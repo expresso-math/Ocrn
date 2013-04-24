@@ -5,7 +5,6 @@ from ocrn import neuralnet as nn
 import numpy
 import pickle
 import os
-from pyfiglet import figlet_format as ascii_print
 
 class Grinder:
 	"""
