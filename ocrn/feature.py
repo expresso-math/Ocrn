@@ -9,6 +9,7 @@ class feature:
 		try:
 			image = im.open(imagepath)
 			imagearray=np.asarray(image.crop(image.getbbox()).resize((10,10))).astype(float)
+			print imagearray
 			return imagearray
 		except IOError:
 			print "File Not Found"
@@ -17,7 +18,9 @@ class feature:
 	@staticmethod
 	def getImageArrayForLoadedFile( the_file):
 		try:
-			imagearray = np.asarray(the_file.crop(the_file.getbbox()).resize((10,10))).astype(float)
+			image = im.open(the_file).convert("L")
+			imagearray = np.asarray(image.crop(image.getbbox()).resize((10,10))).astype(float)
+			print imagearray
 			return imagearray
 		except IOError:
 			print "FnF"
