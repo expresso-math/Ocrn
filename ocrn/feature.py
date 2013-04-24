@@ -13,6 +13,15 @@ class feature:
 		except IOError:
 			print "File Not Found"
 			return np.zeros((10,10))
+
+	@staticmethod
+	def getImageArrayForLoadedFile( the_file):
+		try:
+			imagearray = np.asarray(the_file.crop(the_file.getbbox()).resize((10,10))).astype(float)
+			return imagearray
+		except IOError:
+			print "FnF"
+			return np.zeros((10,10))
 	
 	# Normalizes a 2D array cell.
 	@staticmethod
@@ -37,6 +46,10 @@ class feature:
 	@staticmethod
 	def getNormalizedImageArray( imagepath):
 		return feature.getNormalizedArray(feature.getImageArray(imagepath))
+
+	@staticmethod
+	def getNormalizedImageArrayForLoadedFile( the_file):
+		return feature.getNormalizedArray(feature.getImageArrayForLoadedFile(the_file))
 	
 	# Returns Feature Vector of an Image
 	@staticmethod
@@ -45,40 +58,8 @@ class feature:
 		vector = np.resize(array,(1,100))
 		return vector[0]
 
-
 	@staticmethod
-	def getTrainingCount():
-		"""
-		Gets the number of trained images from the imageData file.
-		"""
-		# Will need to change this to relative path later.
-		wcData = os.popen("wc -l /home/dg/Ocrn/data/inputdata").read()
-		# Because wc returns number and filename
-		wcList = wcData.split()
-		print wcList
-		return int(wcList[0])
-		
-
-	@staticmethod
-	def generateDataSetFromRoaster(dataTuple):
-		"""
-		Takes a tuple of (imageData, asciiVal) and adds all images to
-		../data/trainingdata/ and then adds a line to imagedata
-		"""
-		imageData, asciiVal = dataTuple
-		
-		# For each imageData entry in the imageData list, save as a bmp and
-		# write that path to imageData with `path:asciiVal`
-
-		#This is to not have to do a getTrainingCount call every time.
-		trainCount = feature.getTrainingCount()
-		datafile = open("/home/dg/Ocrn/data/inputdata", "a")
-
-		for image in imageData:
-			pathname = "/home/dg/Ocrn/data/trainingdata/" + str(trainCount) + ".bmp"
-			tempImage = image.convert("L")
-			tempImage.save(pathname, "BMP")
-			datafile.write(pathname+":"+str(asciiVal)+"\n")
-			trainCount = trainCount + 1 
-		
-		datafile.close()
+	def getImageFeatureVectorForLoadedFile( the_file):
+		array = feature.getNormalizedImageArrayForLoadedFile(the_file)
+		vector = np.resize(array, (1,100))
+		return vector[0]

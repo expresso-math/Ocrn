@@ -15,7 +15,7 @@ class neuralnet:
 	def loadTrainingData(self, trainingdataset):
 		if trainingdataset.getDimension('input') == self.inputdimension and \
 			trainingdataset.getDimension('target') == self.outputdimension:
-				self.trainer = BackpropTrainer(self.nnet, trainingdataset, momentum = 0.0, verbose = True, batchlearning=False)
+				self.trainer = BackpropTrainer(self.nnet, trainingdataset, verbose = False) ##, learningrate = 0.001, lrdecay = 1.0, momentum = 0.0, verbose=True, batchlearning=False, weightdecay=0.001)
 				return 1
 		else:
 			print "Dataset-Network size mismatch\n"
@@ -25,6 +25,10 @@ class neuralnet:
 	def teach(self, n):
 		for i in range (1, n+1):
 			print str(i) + " : " + str(self.trainer.train())
+
+
+	def teach_one(self):
+		return self.trainer.train()
 
 	# Train until convergence.
 	def teachUntilConvergence(self, max=0):
