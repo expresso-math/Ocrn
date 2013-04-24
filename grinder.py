@@ -6,6 +6,8 @@ import numpy
 import pickle
 import os
 
+OCRN_PATH = "/home/dg/Ocrn/"
+
 class Grinder:
 	"""
 	Class to encapsulate the text-recognition neural network, based off swvist's implementation.
@@ -32,7 +34,7 @@ class Grinder:
 				self.data_set = pickle.load(file)
 				file.close()
 
-	def load_dataset(self, file_path=['/Users/josefdlange/Projects/Expresso/Ocrn/data/inputdata']):
+	def load_dataset(self, file_path=[OCRN_PATH+'data/inputdata']):
 		"""
 		Load the dataset from file. Defaults to the above.
 		"""
@@ -99,10 +101,10 @@ class Grinder:
 
 		#This is to not have to do a getTrainingCount call every time.
 		trainCount = self.getTrainingCount()
-		datafile = open("/Users/josefdlange/Projects/Expresso/Ocrn/data/inputdata", "a")
+		datafile = open(OCRN_PATH+"/data/inputdata", "a")
 
 		for image in imageData:
-			pathname = "/Users/josefdlange/Projects/Expresso/Ocrn/data/trainingdata/" + str(trainCount) + ".bmp"
+			pathname = OCRN_PATH+"/data/trainingdata/" + str(trainCount) + ".bmp"
 			tempImage = image.convert("L")
 			tempImage.save(pathname, "BMP")
 			datafile.write(pathname+":"+str(asciiVal)+"\n")
@@ -115,7 +117,7 @@ class Grinder:
 		Gets the number of trained images from the imageData file.
 		"""
 		# Will need to change this to relative path later.
-		wcData = os.popen("wc -l /Users/josefdlange/Projects/Expresso/Ocrn/data/inputdata").read()
+		wcData = os.popen("wc -l "+OCRN_PATH+i"/data/inputdata").read()
 		# Because wc returns number and filename
 		wcList = wcData.split()
 		print wcList
@@ -134,12 +136,6 @@ def main():
 	# 	print str(epochs) + ' : ' + str(value)
 	# 	epochs = epochs + 1
 	# print 'Took ' + str(epochs) + ' epochs...'
-	print g.guess('/Users/josefdlange/Projects/Expresso/Ocrn/data/testdata/t1.bmp')
-	print g.guess('/Users/josefdlange/Projects/Expresso/Ocrn/data/testdata/t2.bmp')
-	print g.guess('/Users/josefdlange/Projects/Expresso/Ocrn/data/testdata/t3.bmp')
-	print g.guess('/Users/josefdlange/Projects/Expresso/Ocrn/data/testdata/t4.bmp')
-	print g.guess('/Users/josefdlange/Projects/Expresso/Ocrn/data/testdata/t5.bmp')
-	print g.guess('/Users/josefdlange/Projects/Expresso/Ocrn/data/testdata/t6.bmp')
 
 if  __name__ =='__main__':
     main()
