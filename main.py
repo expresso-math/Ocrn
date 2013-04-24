@@ -23,10 +23,11 @@ while(True):
 		break
 	elif x == "t":
 		t = int(raw_input("How many times?\t:\t"))
-		n.teach(t)
+		#n.teach(t)
+		n.teachUntilConvergence(max=t)
 	elif x == "e":
 		e = raw_input("Enter input file\t:\t")
 		x = n.activate(ft.feature.getImageFeatureVector(e))
-		print "\nThere is a high probability that the image is '"+str(unichr(x))+"'\n"
+		print "\nThere is a high probability that the image is '"+str(chr(x))+"'\n"
 	else:
 		print "Invalid option\n"

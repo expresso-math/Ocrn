@@ -11,7 +11,7 @@ class dataset:
 		self.DS = SupervisedDataSet(self.inputsize, self.labelsize)
 	
 	# Adds data to existing training dataset
-	def addTrainingData(self,inputdata, labeldata):
+	def addTrainingData(self, inputdata, labeldata):
 		try:
 			if inputdata.size == self.inputsize and labeldata.size == self.labelsize:
 				self.DS.appendLinked(inputdata, labeldata)
@@ -24,8 +24,13 @@ class dataset:
 		return self.DS
 	
 	def generateDataSet(self):
-		for line in fileinput.input(['data/inputdata']):
+		if self.generateDataSetFromFile(['data/inputdata']):
+			return 1
+		return 0
+
+	def generateDataSetFromFile(self, filePathList):
+		for line in fileinput.input(filePathList):
 			x = line.split(':')
 			self.addTrainingData(ft.feature.getImageFeatureVector(x[0]),np.array([int(x[1])]))
+			print "Character value: " + str(unichr(int(x[1]))) + "Int val: " + str(int(x[1]))
 		return 1
-
