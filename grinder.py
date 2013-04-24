@@ -67,6 +67,7 @@ class Grinder:
 		if image:
 			vector = ft.feature.getImageFeatureVectorForLoadedFile(image)
 			result = self.neural_network.activate(vector)
+			print result
 			return str(unichr(result))
 
 	def pickle_network(self):
