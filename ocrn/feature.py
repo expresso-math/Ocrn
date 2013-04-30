@@ -18,7 +18,7 @@ class feature:
 	@staticmethod
 	def getImageArrayForLoadedFile( the_file):
 		try:
-			image = im.open(the_file).convert("L")
+			image = im.open(the_file).convert("1")
 			imagearray = np.asarray(image.crop(image.getbbox()).resize((10,10))).astype(float)
 			print imagearray
 			return imagearray

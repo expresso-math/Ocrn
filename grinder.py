@@ -2,11 +2,22 @@ from ocrn import dataset as ds
 from ocrn import feature as ft
 from ocrn import neuralnet as nn
 
+from PIL import Image
+
 import numpy
 import pickle
 import os
+import socket
+import md5
+import datetime
+
+hostname = socket.gethostname()
+joey = hostname == "Plutonium"
 
 OCRN_PATH = "/home/dg/Ocrn/"
+
+if joey:
+	OCRN_PATH = "/Users/josefdlange/Projects/Expresso/Ocrn/"
 
 class Grinder:
 	"""
@@ -62,14 +73,23 @@ class Grinder:
 		if image_file_path:
 			feature_vector = ft.feature.getImageFeatureVector(image_file_path)
 			result = self.neural_network.activate(feature_vector)
+			print "RESULT"
+			print result
+			print "======"
+			print unichr(result)
+			print "======"
+			print str(unichr(result))
 			return str(unichr(result))
 
 	def guess_on_image(self, image):
 		if image:
-			vector = ft.feature.getImageFeatureVectorForLoadedFile(image)
-			result = self.neural_network.activate(vector)
+			image = Image.open(image)
+			pathname = OCRN_PATH+"/data/testdata/" + md5.new(str(datetime.datetime.now())).hexdigest() + ".bmp"
+			tempImage = image.convert("1")
+			tempImage.save(pathname, "BMP")
+			result = self.guess(pathname)
 			print result
-			return str(unichr(result))
+			return result
 
 	def pickle_network(self):
 		"""
@@ -105,7 +125,7 @@ class Grinder:
 
 		for image in imageData:
 			pathname = OCRN_PATH+"/data/trainingdata/" + str(trainCount) + ".bmp"
-			tempImage = image.convert("L")
+			tempImage = image.convert("1")
 			tempImage.save(pathname, "BMP")
 			datafile.write(pathname+":"+str(asciiVal)+"\n")
 			trainCount = trainCount + 1 
@@ -117,10 +137,12 @@ class Grinder:
 		Gets the number of trained images from the imageData file.
 		"""
 		# Will need to change this to relative path later.
-		wcData = os.popen("wc -l "+OCRN_PATH+i"/data/inputdata").read()
+		wcData = os.popen("wc -l " + OCRN_PATH + "/data/inputdata").read()
 		# Because wc returns number and filename
 		wcList = wcData.split()
-		print wcList
+		if not wcList:
+			wcList = ['0']
+		print "wcList is " + str(wcList)
 		return int(wcList[0])
 
 
