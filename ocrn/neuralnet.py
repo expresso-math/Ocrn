@@ -32,6 +32,7 @@ class neuralnet:
 
 	# Train until convergence.
 	def teachUntilConvergence(self, max=0):
+		print self
 		if max > 0:
 			self.trainer.trainUntilConvergence(maxEpochs=max, verbose=True)
 		else:
@@ -41,6 +42,7 @@ class neuralnet:
 	def activate(self, testdata):
 		if testdata.size == self.inputdimension:
 			x = self.nnet.activate(testdata)
+			print x
 			return int(round(x[0],0))
 		else:
 			print "Test data error\n"

@@ -4,6 +4,9 @@ from ocrn import neuralnet as nn
 
 from PIL import Image
 
+from pybrain.tools.xml.networkwriter import NetworkWriter
+from pybrain.tools.xml.networkreader import NetworkReader
+
 import numpy
 import pickle
 import os
@@ -29,21 +32,13 @@ class Grinder:
 	-- data_set:		The data set. ocrn.dataset type
 	"""
 
-	def __init__(self, clean=False):
+	def __init__(self):
 		""" 
 		Create a __new__ Grinder object.
 		"""
 		self.neural_network = nn.neuralnet(100,80,1)
 		self.data_set 		= ds.dataset(100,1)
-		if not clean:
-			if os.path.isfile('neural_net_pickle.p'):
-				file = open('neural_net_pickle.p', 'rb')
-				self.neural_network = pickle.load(file)
-				file.close()
-			if os.path.isfile('data_set_pickle.p'):
-				file = open('data_set_pickle.p', 'rb')
-				self.data_set = pickle.load(file)
-				file.close()
+		
 
 	def load_dataset(self, file_path=[OCRN_PATH+'data/inputdata']):
 		"""
@@ -64,7 +59,7 @@ class Grinder:
 		self.neural_network.teachUntilConvergence()
 
 	def train(self, maxEpochs = 100):
-		self.neural_network.teachUntilConvergence(max=maxEpochs)
+		self.neural_network.teach(maxEpochs)
 
 	def train_loop(self, n):
 		self.neural_network.teach(n)
@@ -73,11 +68,6 @@ class Grinder:
 		if image_file_path:
 			feature_vector = ft.feature.getImageFeatureVector(image_file_path)
 			result = self.neural_network.activate(feature_vector)
-			print "RESULT"
-			print result
-			print "======"
-			print unichr(result)
-			print "======"
 			print str(unichr(result))
 			return str(unichr(result))
 
@@ -90,24 +80,6 @@ class Grinder:
 			result = self.guess(pathname)
 			print result
 			return result
-
-	def pickle_network(self):
-		"""
-		Pickle the neural net.
-		"""
-		file = open('neural_net_pickle.p', 'wb')
-		pickle.dump(self.neural_network, file)
-		file = open('data_set_pickle.p', 'wb')
-		pickle.dump(self.data_set, file)
-
-	def unpickle_network(self):
-		"""
-		Unpack the neural net from a pickle.
-		"""
-		file = open('neural_net_pickle.p', 'rb')
-		self.neural_network = pickle.load(file)
-		file = open('data_set_pickle.p', 'rb')
-		self.data_set = pickle.load(file)
 
 	def generateDataSetFromRoaster(self, dataTuple):
 		"""
@@ -145,19 +117,18 @@ class Grinder:
 		print "wcList is " + str(wcList)
 		return int(wcList[0])
 
+	def reset(self):
+		self.neural_network = nn.neuralnet(100,80,1)
+		self.data_set 		= ds.dataset(100,1)
+
 
 def main():
 	g = Grinder()
-	g.load_dataset()
-	# g.train_loop(10000)
-	g.train_to_convergence()
-	# epochs = 0
-	# value = 1
-	# while value > 0.001:
-	# 	value = g.neural_network.teach_one()
-	# 	print str(epochs) + ' : ' + str(value)
-	# 	epochs = epochs + 1
-	# print 'Took ' + str(epochs) + ' epochs...'
+	print g
+	print g.neural_network
+	print g.neural_network.nnet
+	print g.data_set
+	print g.data_set.DS
 
 if  __name__ =='__main__':
     main()

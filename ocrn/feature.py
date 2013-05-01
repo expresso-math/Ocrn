@@ -7,24 +7,24 @@ class feature:
 	@staticmethod
 	def getImageArray(imagepath):
 		try:
-			image = im.open(imagepath)
-			imagearray=np.asarray(image.crop(image.getbbox()).resize((10,10))).astype(float)
-			print imagearray
+			image = im.open(imagepath).convert("P")
+			imagearray = np.array(image.getdata().resize((10,10))).astype(float).reshape((10,10))
+			# imagearray=np.asarray(image.crop(image.getbbox()).resize((10,10))).astype(float)
 			return imagearray
 		except IOError:
 			print "File Not Found"
 			return np.zeros((10,10))
 
-	@staticmethod
-	def getImageArrayForLoadedFile( the_file):
-		try:
-			image = im.open(the_file).convert("1")
-			imagearray = np.asarray(image.crop(image.getbbox()).resize((10,10))).astype(float)
-			print imagearray
-			return imagearray
-		except IOError:
-			print "FnF"
-			return np.zeros((10,10))
+	# @staticmethod
+	# def getImageArrayForLoadedFile( the_file):
+	# 	try:
+	# 		image = im.open(the_file).convert("P")
+	# 		# imagearray = np.asarray(image.crop(image.getbbox()).resize((10,10))).astype(float)
+	# 		imagearray = np.array(image.getdata(), dtype = np.uint8).resize((10,10))
+	# 		return imagearray
+	# 	except IOError:
+	# 		print "FnF"
+	# 		return np.zeros((10,10))
 	
 	# Normalizes a 2D array cell.
 	@staticmethod
@@ -40,9 +40,9 @@ class feature:
 	# normalizeArrayCell is called for all non zero cells
 	@staticmethod
 	def getNormalizedArray( imagearray):
-		nonzerocells = np.transpose(imagearray.nonzero())
-		for i in range (0, nonzerocells.shape[0]):
-			feature.normalizeArrayCell(imagearray, nonzerocells[i][0],nonzerocells[i][1])
+		# nonzerocells = np.transpose(np.nonzero(imagearray==255))
+		# for i in range (0, nonzerocells.shape[0]):
+		# 	feature.normalizeArrayCell(imagearray, nonzerocells[i][0],nonzerocells[i][1])
 		return imagearray
 	
 	# Returns Normalized 2D array from an Image
