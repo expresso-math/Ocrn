@@ -68,7 +68,10 @@ class Grinder:
 		if image_file_path:
 			feature_vector = ft.feature.getImageFeatureVector(image_file_path)
 			result = self.neural_network.activate(feature_vector)
-			print str(unichr(result))
+			if result >= 0:
+				result = result
+			else:
+				result = 0
 			return str(unichr(result))
 
 	def guess_on_image(self, image):

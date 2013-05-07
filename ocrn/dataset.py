@@ -24,14 +24,10 @@ class dataset:
 		return self.DS
 	
 	def generateDataSet(self):
-		if self.generateDataSetFromFile(['data/inputdata']):
-			return 1
-		return 0
+		self.generateDataSetFromFile(['data/inputdata'])
 
 	def generateDataSetFromFile(self, filePathList):
 		for line in fileinput.input(filePathList):
 			x = line.split(':')
-			featureVector = ft.feature.getImageFeatureVector(x[0])
-			self.addTrainingData(featureVector, np.array([int(x[1])]))
-			print "Character value: " + str(unichr(int(x[1]))) + ".... Int val: " + str(int(x[1]))
+			self.addTrainingData(ft.feature.getImageFeatureVector(x[0]), np.array([int(x[1])]))
 		return 1

@@ -8,6 +8,8 @@ class neuralnet:
 			self.inputdimension = args[0]
 			self.outputdimension = args[len(args)-1]
 			self.nnet.sortModules()
+			print self.inputdimension
+			print self.outputdimension
 		else:
 			print "Number of layers must be greater than or equal to two\n"
 
@@ -15,7 +17,7 @@ class neuralnet:
 	def loadTrainingData(self, trainingdataset):
 		if trainingdataset.getDimension('input') == self.inputdimension and \
 			trainingdataset.getDimension('target') == self.outputdimension:
-				self.trainer = BackpropTrainer(self.nnet, trainingdataset, verbose = False) ##, learningrate = 0.001, lrdecay = 1.0, momentum = 0.0, verbose=True, batchlearning=False, weightdecay=0.001)
+				self.trainer = BackpropTrainer(self.nnet, trainingdataset, learningrate = 0.0001, verbose = True) ##, learningrate = 0.001, lrdecay = 1.0, momentum = 0.0, verbose=True, batchlearning=False, weightdecay=0.001)
 				return 1
 		else:
 			print "Dataset-Network size mismatch\n"
@@ -23,8 +25,9 @@ class neuralnet:
 
 	# Train the neural network 'n' times with loaded training data.
 	def teach(self, n):
-		for i in range (1, n+1):
-			print str(i) + " : " + str(self.trainer.train())
+		self.teachUntilConvergence(max=n)
+		# for i in range (1, n+1):
+		# 	str(self.trainer.train())
 
 
 	def teach_one(self):
@@ -32,9 +35,8 @@ class neuralnet:
 
 	# Train until convergence.
 	def teachUntilConvergence(self, max=0):
-		print self
 		if max > 0:
-			self.trainer.trainUntilConvergence(maxEpochs=max, verbose=True)
+			self.trainer.trainUntilConvergence(maxEpochs=100, verbose=True, validationProportion=0.3)
 		else:
 			self.trainer.trainUntilConvergence(verbose=True)
 
@@ -42,7 +44,6 @@ class neuralnet:
 	def activate(self, testdata):
 		if testdata.size == self.inputdimension:
 			x = self.nnet.activate(testdata)
-			print x
 			return int(round(x[0],0))
 		else:
 			print "Test data error\n"
